@@ -1,0 +1,191 @@
+City:
+  type: object
+  description: Город
+  required:
+    - id
+    - name
+    - coordinates
+    - creationDate
+    - area
+    - capital
+    - government
+    - governor
+  properties:
+    id:
+      description: Идентификатор города
+      required: true
+      type: integer
+      format: int64
+      minimum: 1
+    name:
+      description: Название города
+      type: string
+      minLength: 1
+    coordinates:
+      $ref: '#/Coordinates'
+    creationDate:
+      description: Дата создания
+      type: DateTime
+    area:
+      description: TODO
+      type: float
+      minimum: 0
+    population:
+      description: TODO
+      type: integer
+      format: int64
+      minimum: 1
+    metersAboveSeaLevel:
+      type: number
+      format: double
+    establishmentDate:
+      type: time
+    capital:
+      type: boolean
+    government:
+      $ref: '#/Government'
+    governor:
+      $ref: '#/Human'
+    inhabitant:
+      description: Жители города
+      type: array
+      items:
+        $ref: '#/Human'
+
+Coordinates:
+  type: object
+  description: Координаты
+  required:
+    - y
+  properties:
+    x:
+      description: Х координата
+      type: float
+    y:
+      description: Y координата
+      type: integer
+
+Human:
+  type: object
+  description: Человек
+  properties:
+    height:
+      description: Рост
+      type: float
+      minimum: 0.001
+    birthday:
+      description: День рождение
+      type: DateTime
+
+Government:
+  type: string
+  enum:
+    - DESPOTISM
+    - PATRIARCHY
+    - ETHNOCRACY
+
+Pager:
+  type: object
+  description: Пагинатор
+  properties:
+    totalPages:
+      description: Сколько всего страниц
+      type: integer
+    pageNum:
+      description: Номер текущей страницы
+      type: integer
+
+CityField:
+  description: Колонка по которой необходимо сортировать
+  type: string
+  enum:
+    - id
+    - name
+    - coordinates
+    - creationDate
+    - area
+    - population
+    - metersAboveSeaLevel
+    - establishmentDate
+    - capital
+    - government
+    - governor
+
+SortingType:
+  description: Тип сортировки
+  type: string
+  enum:
+    - asc
+    - desc
+
+SortingStrategy:
+  description: Стратегия сортировки
+  required:
+    - sortingType
+    - sortingColumn
+  type: object
+  properties:
+    sortingType:
+      $ref: '#/SortingType'
+    sortingColumn:
+      $ref: '#/CityField'
+
+FilterType:
+  description: Тип фильтрации
+  type: string
+  enum:
+    - contains
+    - more
+    - moreOrEquals
+    - less
+    - lessOrEquals
+    - equals
+
+FilterStrategy:
+  description: Стратегия фильтрации
+  required:
+    - filterColumn
+    - filterType
+    - filterValue
+  type: object
+  properties:
+    filterColumn:
+      $ref: '#/CityField'
+    filterType:
+      $ref: '#/FilterType'
+    filterValue:
+      description: Значение которое будет использоваться для фильтрации
+      type: string
+      minLength: 1
+
+CitiesRequest:
+  type: object
+  description: Запрос на получение списка городов
+  properties:
+    page:
+      description: Номер страницы
+      type: integer
+    sortingStrategies:
+      description: Список с описанием фильтрации
+      type: array
+      items:
+        $ref: '#/SortingStrategy'
+    filterStrategies:
+      description: Список с описанием фильтрации
+      type: array
+      items:
+        $ref: '#/FilterStrategy'
+
+CitiesWithPagerDto:
+  type: object
+  required:
+    - cities
+    - pager
+  properties:
+    cities:
+      type: array
+      items:
+        $ref: '#/City'
+    pager:
+      $ref: '#/Pager'
+

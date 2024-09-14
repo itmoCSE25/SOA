@@ -1,0 +1,69 @@
+endpoint:
+  get:
+    tags:
+      - city
+    summary: Получение города по идентификатору
+    operationId: getCityById
+    parameters:
+      - in: path
+        description: Идентификатор города
+        name: cityId
+        required: true
+        schema:
+          type: integer
+          format: int64
+    responses:
+      200:
+        description: OK
+      500:
+        description: Internal Server Error
+
+  put:
+    tags:
+      - city
+    summary: Обновление города по идентификатору
+    operationId: updateCityById
+    parameters:
+      - in: path
+        description: Идентификатор города
+        name: cityId
+        required: true
+        schema:
+          type: integer
+          format: int64
+    requestBody:
+      required: true
+      content:
+        application/xml:
+          schema:
+            $ref: 'common/schemas.yaml#/City'
+    responses:
+      200:
+        description: OK
+      400:
+        description: Can't find city with such id
+      500:
+        description: Internal server error
+
+  delete:
+    tags:
+      - city
+    summary: Удаление города по идентификатору
+    operationId: deleteCityById
+    parameters:
+      - in: path
+        description: Идентификатор города
+        name: cityId
+        required: true
+        schema:
+          type: integer
+          format: int64
+    responses:
+      200:
+        description: OK
+      400:
+        description: Can't find city with such id
+      500:
+        description: Internal server error
+
+

@@ -1,0 +1,19 @@
+openapi: 3.0.3
+info:
+  title: Soa lab work
+  description: API для лабораторной работы по СОА
+  version: LATEST
+x-servers:
+  url: https://localhost:8081
+tags:
+  - name: utility
+    description: Получение состояния приложения
+  - name: genocide
+    description: Описание genocide сервиса
+paths:
+  /ping:
+    $ref: 'api/ping.yaml#/endpoint'
+  /genocide/deport/{id-from}/{id-to}:
+    $ref: 'api/genocideDeportApi.yaml#/endpoint'
+  /genocide/kill/{id}:
+    $ref: 'api/genocideKillApi.yaml#/endpoint'

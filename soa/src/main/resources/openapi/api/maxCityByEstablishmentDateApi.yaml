@@ -1,0 +1,15 @@
+endpoint:
+  get:
+    tags:
+      - external
+    summary: Получить город с максимальным значением поля establishmentDate
+    operationId: getCityByMaxEstablishmentDate
+    responses:
+      200:
+        description: OK
+        content:
+          application/xml:
+            schema:
+              $ref: 'common/schemas.yaml#/City'
+      500:
+        description: External Server Error

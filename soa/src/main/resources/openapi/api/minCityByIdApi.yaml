@@ -1,0 +1,13 @@
+endpoint:
+  get:
+    tags:
+      - external
+    summary: Получение города с минимальным идентификатором
+    operationId: getCityByMinId
+    responses:
+      200:
+        description: OK
+        content:
+          application/xml:
+            schema:
+              $ref: 'common/schemas.yaml#/City'

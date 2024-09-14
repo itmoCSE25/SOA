@@ -1,0 +1,28 @@
+endpoint:
+  get:
+    tags:
+      - genocide
+    summary: Депортировать всё население города с id-from в город с id-to
+    operationId: deportFromCityToAnotherCity
+    parameters:
+      - in: path
+        description: Идентификатор города откуда надо депортировать
+        name: id-from
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - in: path
+        description: Идентификатор города куда надо депортировать
+        name: id-to
+        required: true
+        schema:
+          type: integer
+          format: int64
+    responses:
+      200:
+        description: OK
+      400:
+        description: Can't find city with such ids
+      500:
+        description: External Server Error

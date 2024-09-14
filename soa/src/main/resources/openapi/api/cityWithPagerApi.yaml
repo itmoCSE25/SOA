@@ -1,0 +1,23 @@
+endpoint:
+  get:
+    tags:
+      - city
+    summary: Получение списка городов с пагинацией
+    operationId: getCities
+    requestBody:
+      required: true
+      content:
+        application/xml:
+          schema:
+            $ref: 'common/schemas.yaml#/CitiesRequest'
+    responses:
+      200:
+        description: OK
+        content:
+          application/xml:
+            schema:
+              $ref: 'common/schemas.yaml#/CitiesWithPagerDto'
+      500:
+        description: Internal Server Error
+
+

@@ -1,0 +1,22 @@
+endpoint:
+  get:
+    tags:
+      - genocide
+    summary: Уничтожить всё население города с заданным id
+    operationId: killAllInCityById
+    parameters:
+      - in: path
+        description: Идентификатор города в котором необходимо уничтожить все население
+        name: id
+        required: true
+        schema:
+          type: integer
+          format: int64
+    responses:
+      200:
+        description: OK
+      400:
+        description: Can't find city with such ids
+      500:
+        description: External Server Error
+

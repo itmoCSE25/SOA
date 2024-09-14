@@ -1,0 +1,24 @@
+endpoint:
+  get:
+    tags:
+      - external
+    summary: Получение список городов у которого поле government меньше заданного
+    operationId: getCitiesWhereGovernmentLessThen
+    parameters:
+      - in: query
+        name: type
+        description: Значение поля government
+        required: true
+        schema:
+          $ref: 'common/schemas.yaml#/Government'
+    responses:
+      200:
+        description: OK
+        content:
+          application/xml:
+            schema:
+              type: array
+              items:
+                $ref: 'common/schemas.yaml#/City'
+      500:
+        description: Internal Server Error

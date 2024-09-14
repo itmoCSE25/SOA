@@ -1,0 +1,30 @@
+openapi: 3.0.3
+info:
+  title: Soa lab work
+  description: API для лабораторной работы по СОА
+  version: LATEST
+x-servers:
+  - url: http://localhost:9991
+    description: city
+  - url: http://localhost:8080/v3/api-docs
+    description: genocide
+tags:
+  - name: utility
+    description: Получение состояния приложения
+  - name: city
+    description: API для работы с городами
+  - name: genocide
+    description: Описание genocide сервиса
+paths:
+  /ping:
+    $ref: 'api/ping.yaml#/endpoint'
+  /api/city/{cityId}:
+    $ref: 'api/cityByIdApi.yaml#/endpoint'
+  /api/city:
+    $ref: 'api/cityWithPagerApi.yaml#/endpoint'
+  /api/external/min/id:
+    $ref: 'api/minCityByIdApi.yaml#/endpoint'
+  /api/external/max/establishment-date:
+    $ref: 'api/maxCityByEstablishmentDateApi.yaml#/endpoint'
+  /api/external/government:
+    $ref: 'api/lessThenGovernmentApi.yaml#/endpoint'
