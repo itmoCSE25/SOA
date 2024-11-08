@@ -91,6 +91,7 @@ Pager:
     totalPages:
       description: Сколько всего страниц
       type: integer
+      format: int64
     pageNum:
       description: Номер текущей страницы
       type: integer
@@ -101,7 +102,8 @@ CityField:
   enum:
     - id
     - name
-    - coordinates
+    - x
+    - y
     - creationDate
     - area
     - population
@@ -165,11 +167,16 @@ CitiesRequest:
     page:
       description: Номер страницы
       type: integer
+      default: 1
+      minimum: 1
+    pageSize:
+      description: Размер страницы
+      type: integer
+      default: 20
+      minimum: 1
     sortingStrategies:
       description: Список с описанием фильтрации
-      type: array
-      items:
-        $ref: '#/SortingStrategy'
+      $ref: '#/SortingStrategy'
     filterStrategies:
       description: Список с описанием фильтрации
       type: array

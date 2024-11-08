@@ -1,9 +1,10 @@
 endpoint:
-  get:
+  post:
     tags:
       - city
     summary: Получение списка городов с пагинацией
     operationId: getCities
+    parameters:
     requestBody:
       required: true
       content:
