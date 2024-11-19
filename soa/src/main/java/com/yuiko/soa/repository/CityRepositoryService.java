@@ -1,9 +1,11 @@
 package com.yuiko.soa.repository;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,14 +24,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class CityRepositoryService {
 
+    ZoneOffset defaultZoneOffset = ZoneOffset.UTC;
+
     private final RowMapper<CityEntity> CITY_ENTITY_MAPPER = (rs, idx) -> new CityEntity(
             rs.getLong("id"),
             rs.getString("name"),
-            OffsetDateTime.ofInstant(Instant.ofEpochMilli(rs.getInt("creation_date")), ZoneId.systemDefault()),
+            Optional.ofNullable(rs.getTimestamp("creation_date"))
+                    .map(date -> date.toLocalDateTime().atOffset(defaultZoneOffset))
+                    .orElse(null),
             rs.getFloat("area"),
             rs.getLong("population"),
             rs.getDouble("meters_above_sea_level"),
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(rs.getInt("establishment_date")), ZoneId.systemDefault()),
+            Optional.ofNullable(rs.getTimestamp("establishment_date"))
+                    .map(Timestamp::toLocalDateTime)
+                    .orElse(null),
             rs.getBoolean("capital"),
             Optional.ofNullable(rs.getString("government")).map(GovernmentEnum::valueOf).orElse(null),
             new CoordinatesEntity(rs.getLong("coordinates_id"), rs.getFloat("x"), rs.getInt("y"))
@@ -81,6 +89,8 @@ public class CityRepositoryService {
         SortingStrategy sortingStrategy = citiesRequest.getSortingStrategies();
         if (sortingStrategy != null) {
             order = "order by %s %s".formatted(sortingStrategy.getSortingColumn(), sortingStrategy.getSortingType());
+        } else {
+            order = "order by id desc";
         }
         return namedParameterJdbcOperations.query(
                 sql.formatted(where, order),

@@ -18,9 +18,9 @@ tags:
 paths:
   /ping:
     $ref: 'api/ping.yaml#/endpoint'
-  /api/city/{cityId}:
+  /api/cities/{cityId}:
     $ref: 'api/cityByIdApi.yaml#/endpoint'
-  /api/city:
+  /api/cities:
     $ref: 'api/cityWithPagerApi.yaml#/endpoint'
   /api/external/min/id:
     $ref: 'api/minCityByIdApi.yaml#/endpoint'

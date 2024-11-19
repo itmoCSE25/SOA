@@ -28,16 +28,9 @@ public class CityService {
 
     public City getCityById(Long cityId) {
         CityEntity cityEntity = cityRepository.getCityEntityById(cityId);
-        List<HumanEntity> humanEntitiesByCityId = humanRepository.getHumanEntitiesByCity(cityId);
         City city = Converters.cityEntityToDto(cityEntity);
-        if (city != null && CollectionUtils.isNotEmpty(humanEntitiesByCityId)) {
-            city.inhabitant(humanEntitiesByCityId.stream().map(Converters::humanEntityToDto).toList());
-            List<HumanEntity> governors = humanEntitiesByCityId.stream().filter(HumanEntity::is_governor).toList();
-            if (governors.size() == 1) {
-                city.governor(Converters.humanEntityToDto(governors.get(0)));
-            } else {
-                // TODO:: add logs
-            }
+        if (city != null) {
+            setInhabitants(city);
         }
         return city;
     }
@@ -53,9 +46,11 @@ public class CityService {
     }
 
     public List<City> getCitiesWithParams(CitiesRequest citiesRequest) {
-        return cityRepositoryService.getCitiesWithParams(citiesRequest).stream()
+        List<City> cities = cityRepositoryService.getCitiesWithParams(citiesRequest).stream()
                 .map(Converters::cityEntityToDto)
                 .toList();
+        cities.forEach(this::setInhabitants);
+        return cities;
     }
 
     public City getCityByMaxEstablishmentDate() {
@@ -68,5 +63,18 @@ public class CityService {
 
     public long getCitiesCount() {
         return cityRepository.count();
+    }
+
+    private void setInhabitants(City city) {
+        List<HumanEntity> humanEntitiesByCityId = humanRepository.getHumanEntitiesByCity(city.getId());
+        if (CollectionUtils.isNotEmpty(humanEntitiesByCityId)) {
+            city.inhabitant(humanEntitiesByCityId.stream().map(Converters::humanEntityToDto).toList());
+            List<HumanEntity> governors = humanEntitiesByCityId.stream().filter(HumanEntity::is_governor).toList();
+            if (governors.size() == 1) {
+                city.governor(Converters.humanEntityToDto(governors.get(0)));
+            } else {
+                // TODO:: add logs
+            }
+        }
     }
 }
