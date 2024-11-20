@@ -50,8 +50,9 @@ public class CityController implements CityApiDelegate {
     }
 
     @Override
-    public ResponseEntity<City> updateCityById(Long cityId, City city) {
-        return ResponseEntity.ok(cityService.updateCityById(cityId, city));
+    public ResponseEntity<Boolean> updateCityById(Long cityId, City city) {
+        cityService.updateCityById(cityId, city);
+        return ResponseEntity.ok(Boolean.TRUE);
     }
 
     private void validateCitiesRequest(CitiesRequest citiesRequest) {

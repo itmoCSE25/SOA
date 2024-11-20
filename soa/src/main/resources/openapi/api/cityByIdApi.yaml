@@ -47,7 +47,7 @@ endpoint:
         content:
           application/xml:
             schema:
-              $ref: 'common/schemas.yaml#/City'
+              type: boolean
       400:
         description: Can't find city with such id
       500:

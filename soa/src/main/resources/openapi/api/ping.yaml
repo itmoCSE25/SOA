@@ -9,7 +9,6 @@ endpoint:
         content:
           application/xml:
             schema:
-              description: Идентификатор кампании
               type: string
       500:
         description: Internal Server Error
