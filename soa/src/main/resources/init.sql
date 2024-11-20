@@ -23,7 +23,7 @@ create table public.human
     id          serial primary key,
     height      float,
     birthday    timestamp with time zone,
-    city        int references city (id),
+    city        int references city (id) on delete cascade,
     is_governor bool
 );
 

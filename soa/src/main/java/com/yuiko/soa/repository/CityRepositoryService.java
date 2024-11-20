@@ -1,10 +1,6 @@
 package com.yuiko.soa.repository;
 
 import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
@@ -151,5 +147,12 @@ public class CityRepositoryService {
                 new MapSqlParameterSource(),
                 CITY_ENTITY_MAPPER
         ).stream().findFirst().orElse(null);
+    }
+
+    public void deleteCityById(Long id) {
+        String sql = "delete from city where city.id = :id";
+        namedParameterJdbcOperations.update(
+                sql, new MapSqlParameterSource("id", id)
+        );
     }
 }
