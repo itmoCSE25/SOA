@@ -12,6 +12,7 @@ import com.yuiko.soa.model.db.CityEntity;
 import com.yuiko.soa.model.db.CoordinatesEntity;
 import com.yuiko.soa.model.db.GovernmentEnum;
 import com.yuiko.soa.model.db.SqlOperations;
+import com.yuiko.soa.model.exceptions.NotFoundException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -97,38 +98,29 @@ public class CityRepositoryService {
         );
     }
 
-    public CityEntity updateCityEntityById(Long cityId, CityEntity cityEntity) {
+    public boolean updateCityEntityById(Long cityId, CityEntity cityEntity) {
         // TODO add update coordinates
         String sql = """
-                insert into public.city (id, name, creation_date, area, population, meters_above_sea_level, establishment_date, capital, government)
-                values (:cityId, :name, :creationDate, :area, :population, :metersAboveSeaLevel, :establishmentDate, :capital, :government)
-                on conflict do update set
-                    name = excluded.name,
-                    creation_date = excluded.creation_date,
-                    area = excluded.area,
-                    population = excluded.population,
-                    meters_above_sea_level = excluded.meters_above_sea_level,
-                    establishment_date = excluded.establishment_date,
-                    capital = excluded.capital,
-                    government = excluded.government;
-                """ + DEFAULT_QUERY + " where city.id = :cityId";
-        List<CityEntity> cityEntities = namedParameterJdbcOperations.query(
+                update public.city
+                    set name = :name, area = :area, population = :population, meters_above_sea_level = :metersAboveSeaLevel,
+                    establishment_date = :establishmentDate, capital = :capital, government = :government
+                where city.id = :cityId
+                """;
+        int affectedRows = namedParameterJdbcOperations.update(
                 sql,
                 new MapSqlParameterSource("cityId", cityId)
                         .addValue("name", cityEntity.name())
-                        .addValue("creationDate", cityEntity.creationDate())
                         .addValue("area", cityEntity.area())
                         .addValue("population", cityEntity.population())
                         .addValue("metersAboveSeaLevel", cityEntity.metersAboveSeaLevel())
                         .addValue("establishmentDate", cityEntity.establishmentDate())
                         .addValue("capital", cityEntity.capital())
-                        .addValue("government", cityEntity.government()),
-                CITY_ENTITY_MAPPER
+                        .addValue("government", cityEntity.government().toString())
         );
-        if (cityEntities.isEmpty()) {
-            return null;
+        if (affectedRows == 0) {
+            throw new NotFoundException("City with id: %d, not found".formatted(cityId));
         }
-        return cityEntities.get(0);
+        return true;
     }
 
     public CityEntity getCityByMaxEstablishmentDate() {

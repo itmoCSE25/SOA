@@ -161,7 +161,7 @@
                                 <delegatePattern>true</delegatePattern>
                             </configOptions>
                             <typeMappings>DateTime=ZonedDateTime</typeMappings>
-                            <typeMappings>time=LocalDateTime</typeMappings>
+                            <typeMappings>LocalTime=LocalDateTime</typeMappings>
                             <importMappings>
                                 <importMapping>LocalDateTime=java.time.LocalDateTime</importMapping>
                                 <importMapping>ZonedDateTime=java.time.ZonedDateTime</importMapping>

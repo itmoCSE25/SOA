@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.yuiko.soa.model.CitiesRequest;
 import com.yuiko.soa.model.City;
+import com.yuiko.soa.model.CityRequest;
 import com.yuiko.soa.model.db.CityEntity;
 import com.yuiko.soa.model.db.HumanEntity;
+import com.yuiko.soa.model.exceptions.NotFoundException;
 import com.yuiko.soa.repository.CityRepository;
 import com.yuiko.soa.repository.CityRepositoryService;
 import com.yuiko.soa.repository.HumanRepository;
@@ -28,10 +30,11 @@ public class CityService {
 
     public City getCityById(Long cityId) {
         CityEntity cityEntity = cityRepository.getCityEntityById(cityId);
-        City city = Converters.cityEntityToDto(cityEntity);
-        if (city != null) {
-            setInhabitants(city);
+        if (cityEntity == null) {
+            throw new NotFoundException("City with id: %d not found".formatted(cityId));
         }
+        City city = Converters.cityEntityToDto(cityEntity);
+        setInhabitants(city);
         return city;
     }
 
@@ -39,10 +42,8 @@ public class CityService {
         cityRepositoryService.deleteCityById(cityId);
     }
 
-    public City updateCityById(Long cityId, City city) {
-        return Converters.cityEntityToDto(
-                cityRepositoryService.updateCityEntityById(cityId, Converters.cityDtoToEntity(city, cityId))
-        );
+    public boolean updateCityById(Long cityId, CityRequest city) {
+        return cityRepositoryService.updateCityEntityById(cityId, Converters.cityDtoToEntity(city, cityId));
     }
 
     public List<City> getCitiesWithParams(CitiesRequest citiesRequest) {

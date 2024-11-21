@@ -40,7 +40,7 @@ endpoint:
       content:
         application/xml:
           schema:
-            $ref: 'common/schemas.yaml#/City'
+            $ref: 'common/schemas.yaml#/CityRequest'
     responses:
       200:
         description: OK
@@ -74,4 +74,20 @@ endpoint:
       500:
         description: Internal server error
 
+  post:
+    tags:
+      - city
+    summary: Создание города
+    operationId: createCity
+    requestBody:
+      required: true
+      content:
+        application/xml:
+          schema:
+            $ref: 'common/schemas.yaml#/CityRequest'
+    responses:
+      200:
+        description: OK
+      500:
+        description: Internal server error
 

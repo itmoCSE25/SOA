@@ -6,6 +6,7 @@ import com.yuiko.soa.model.CitiesRequest;
 import com.yuiko.soa.model.CitiesWithPagerDto;
 import com.yuiko.soa.model.City;
 import com.yuiko.soa.model.CityField;
+import com.yuiko.soa.model.CityRequest;
 import com.yuiko.soa.model.FilterType;
 import com.yuiko.soa.model.Pager;
 import com.yuiko.soa.service.CityService;
@@ -46,13 +47,14 @@ public class CityController implements CityApiDelegate {
 
     @Override
     public ResponseEntity<City> getCityById(Long cityId) {
-        return ResponseEntity.ok(cityService.getCityById(cityId));
+        return ResponseEntity.ok(
+                cityService.getCityById(cityId)
+        );
     }
 
     @Override
-    public ResponseEntity<Boolean> updateCityById(Long cityId, City city) {
-        cityService.updateCityById(cityId, city);
-        return ResponseEntity.ok(Boolean.TRUE);
+    public ResponseEntity<Boolean> updateCityById(Long cityId, CityRequest city) {
+        return ResponseEntity.ok(cityService.updateCityById(cityId, city));
     }
 
     private void validateCitiesRequest(CitiesRequest citiesRequest) {

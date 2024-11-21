@@ -7,6 +7,7 @@ City:
     - coordinates
     - creationDate
     - area
+    - population
     - capital
     - government
     - governor
@@ -25,11 +26,11 @@ City:
       $ref: '#/Coordinates'
     creationDate:
       description: Дата создания
-      type: DateTime
+      type: string
     area:
       description: TODO
       type: float
-      minimum: 0
+      minimum: 1
     population:
       description: TODO
       type: integer
@@ -38,8 +39,6 @@ City:
     metersAboveSeaLevel:
       type: number
       format: double
-    establishmentDate:
-      type: time
     capital:
       type: boolean
     government:
@@ -51,6 +50,8 @@ City:
       type: array
       items:
         $ref: '#/Human'
+    establishmentDate:
+      type: string
 
 Coordinates:
   type: object
@@ -196,3 +197,44 @@ CitiesWithPagerDto:
     pager:
       $ref: '#/Pager'
 
+CityRequest:
+  type: object
+  required:
+    - name
+    - coordinates
+    - population
+    - capital
+    - government
+    - governor
+  properties:
+    name:
+      description: Название города
+      type: string
+      minLength: 1
+    coordinates:
+      $ref: '#/Coordinates'
+    area:
+      description: TODO
+      type: float
+      minimum: 1
+    population:
+      description: TODO
+      type: integer
+      format: int64
+      minimum: 1
+    metersAboveSeaLevel:
+      type: number
+      format: double
+    establishmentDate:
+      type: string
+    capital:
+      type: boolean
+    government:
+      $ref: '#/Government'
+    governor:
+      $ref: '#/Human'
+    inhabitant:
+      description: Жители города
+      type: array
+      items:
+        $ref: '#/Human'

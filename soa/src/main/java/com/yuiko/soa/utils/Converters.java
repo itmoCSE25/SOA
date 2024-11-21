@@ -1,8 +1,13 @@
 package com.yuiko.soa.utils;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import com.yuiko.soa.model.City;
+import com.yuiko.soa.model.CityRequest;
 import com.yuiko.soa.model.Coordinates;
 import com.yuiko.soa.model.Human;
 import com.yuiko.soa.model.db.CityEntity;
@@ -13,7 +18,6 @@ import jakarta.annotation.Nullable;
 
 public class Converters {
 
-    @Nullable
     public static City cityEntityToDto(CityEntity cityEntity) {
         if (cityEntity == null) {
             return null;
@@ -22,11 +26,11 @@ public class Converters {
                 .id(cityEntity.id())
                 .name(cityEntity.name())
                 .coordinates(coordinatesEntityToDto(cityEntity.coordinates()))
-                .creationDate(cityEntity.creationDate())
+                .creationDate(cityEntity.creationDate().toString())
                 .area(cityEntity.area())
                 .population(cityEntity.population())
                 .metersAboveSeaLevel(cityEntity.metersAboveSeaLevel())
-                .establishmentDate(cityEntity.establishmentDate())
+                .establishmentDate(cityEntity.establishmentDate().toString())
                 .capital(cityEntity.capital());
     }
 
@@ -61,11 +65,30 @@ public class Converters {
         return new CityEntity(
                 Optional.ofNullable(cityId).orElse(city.getId()),
                 city.getName(),
-                city.getCreationDate(),
+                creationDateTimeFromDto(city.getCreationDate()),
                 city.getArea(),
                 city.getPopulation(),
                 city.getMetersAboveSeaLevel(),
-                city.getEstablishmentDate(),
+                establishmentDateFromDto(city.getEstablishmentDate()),
+                city.getCapital(),
+                GovernmentEnum.valueOf(city.getGovernment().name()),
+                Converters.coordinatesDtoToEntity(city.getCoordinates())
+        );
+    }
+
+    @Nullable
+    public static CityEntity cityDtoToEntity(CityRequest city, Long cityId) {
+        if (city == null) {
+            return null;
+        }
+        return new CityEntity(
+                cityId,
+                city.getName(),
+                null,
+                city.getArea(),
+                city.getPopulation(),
+                city.getMetersAboveSeaLevel(),
+                establishmentDateFromDto(city.getEstablishmentDate()),
                 city.getCapital(),
                 GovernmentEnum.valueOf(city.getGovernment().name()),
                 Converters.coordinatesDtoToEntity(city.getCoordinates())
@@ -83,4 +106,14 @@ public class Converters {
                 coordinates.getY()
         );
     }
+
+    private static LocalDateTime establishmentDateFromDto(String date) {
+        return LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
+    }
+
+    private static OffsetDateTime creationDateTimeFromDto(String date) {
+        return OffsetDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
+    }
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 }

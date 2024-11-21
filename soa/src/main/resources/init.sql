@@ -9,7 +9,7 @@ create table public.city
 (
     id                     serial primary key,
     name                   text not null,
-    creation_date          timestamp with time zone,
+    creation_date          timestamp with time zone default now() not null,
     area                   float,
     population             bigint,
     meters_above_sea_level double precision,
