@@ -20,5 +20,3 @@ endpoint:
               $ref: 'common/schemas.yaml#/CitiesWithPagerDto'
       500:
         description: Internal Server Error
-
-

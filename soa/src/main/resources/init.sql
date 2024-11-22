@@ -32,5 +32,5 @@ create table public.coordinate
     id   serial primary key,
     x    double precision,
     y    int,
-    city int references city (id)
+    city int references city (id) on delete cascade
 );

@@ -18,6 +18,8 @@ tags:
 paths:
   /ping:
     $ref: 'api/ping.yaml#/endpoint'
+  /api/external/cities:
+    $ref: 'api/city.yaml#/endpoint'
   /api/cities/{cityId}:
     $ref: 'api/cityByIdApi.yaml#/endpoint'
   /api/cities:
