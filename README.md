@@ -11,4 +11,8 @@ PKS
 ```
 keytool -genkeypair -alias foreach -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore foreach.p12 -validity 3650
 ```
-
+# Запуск клиента
+```
+npm i
+npm start
+```
