@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+
+  genocide-service:
+    build: ./genocide
+    container_name: genocide_service
+    networks:
+      - net 
+    ports:
+      - "4949:4848"
+      - "8282:8080"
+      - "8383:8181"
+
+  soa_services:
+    build: ./soa
+    container_name: soa_service
+    networks:
+      - net
+    ports:
+      - "4040:4848"
+      - "7070:8080"
+      - "7171:8181"
+
+  postgres:
+    image: postgres
+    container_name: main-db
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    command: postgres -p 5432
+    volumes:
+      - pg_data:/var/lib/postgresql
+    networks:
+      - net
+    ports:
+      - "5432:5432"
+
+networks:
+  net:
+
+volumes:
+  pg_data:
+    driver: local

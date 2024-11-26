@@ -123,6 +123,26 @@ public class CityRepositoryService {
         return true;
     }
 
+    public boolean killAllInhabitants(long cityId) {
+        String sql = """
+                delete from public.human
+                where city = :cityId
+                """;
+        int cnt = namedParameterJdbcOperations.update(sql, new MapSqlParameterSource("cityId", cityId));
+        return cnt != 0;
+    }
+
+    public boolean departureInhabitants(long fromCityId, long toCityId) {
+        String sql = """
+                update public.human
+                set city = :toCityId
+                where city = :fromCityId
+                """;
+        int cnt = namedParameterJdbcOperations.update(sql, new MapSqlParameterSource("toCityId", toCityId)
+                .addValue("fromCityId", fromCityId));
+        return cnt != 0;
+    }
+
     public CityEntity getCityByMaxEstablishmentDate() {
         String sql = DEFAULT_QUERY + " order by establishment_date desc";
         return namedParameterJdbcOperations.query(

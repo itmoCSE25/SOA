@@ -1,27 +1,30 @@
 package com.yuiko.genocide.api;
 
-import com.yuiko.soa.api.UtilityApi;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Response;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
 
-@RestController
-public class PingController implements UtilityApi {
+@Path("/ping")
+@Api("the Utility API")
+public class PingController {
 
-    private final WebClient webClient;
+    public PingController() {
 
-    public PingController(WebClient webClient) {
-        this.webClient = webClient;
     }
 
-    @Override
-    public ResponseEntity<String> ping() {
-        String result = webClient.get()
-                .uri("/ping")
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-        return ResponseEntity.ok(result);
+    @GET
+    @Produces({ "text/plain-text" })
+    @ApiOperation(value = "", notes = "", response = String.class, tags={ "utility" })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = String.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = Void.class)
+    })
+    public Response ping() {
+        return Response.ok("pong").build();
     }
 }

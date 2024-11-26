@@ -1,13 +1,9 @@
 package com.yuiko.genocide;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.core.Application;
 
-@SpringBootApplication
-public class GenocideApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(GenocideApplication.class, args);
-	}
+@ApplicationPath("/genocide")
+public class GenocideApplication extends Application {
 
 }
