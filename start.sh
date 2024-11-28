@@ -11,4 +11,5 @@ docker stop main-db
 docker rm soa_service
 docker rm main-db
 docker rm genocide_service
-docker-compose up -d
+docker network rm backend
+docker-compose up

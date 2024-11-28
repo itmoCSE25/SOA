@@ -20,7 +20,7 @@ class AppConfig extends AbstractJdbcConfiguration {
     DataSource dataSource() {
         DataSourceBuilder dataSourceBuilder =  DataSourceBuilder.create();
         dataSourceBuilder.driverClassName("org.postgresql.Driver");
-        dataSourceBuilder.url("jdbc:postgresql://localhost:5432/postgres");
+        dataSourceBuilder.url("jdbc:postgresql://main-db:5432/postgres");
         dataSourceBuilder.username("postgres");
         dataSourceBuilder.password("postgres");
         return dataSourceBuilder.build();

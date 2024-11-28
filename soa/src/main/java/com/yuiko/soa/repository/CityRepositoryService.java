@@ -5,9 +5,7 @@ import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
-import com.yuiko.soa.model.CitiesRequest;
-import com.yuiko.soa.model.FilterType;
-import com.yuiko.soa.model.SortingStrategy;
+import com.yuiko.soa.model.api.*;
 import com.yuiko.soa.model.db.CityEntity;
 import com.yuiko.soa.model.db.CoordinatesEntity;
 import com.yuiko.soa.model.db.GovernmentEnum;
@@ -40,24 +38,21 @@ public class CityRepositoryService {
             new CoordinatesEntity(rs.getLong("coordinates_id"), rs.getFloat("x"), rs.getInt("y"))
     );
 
-    private final String DEFAULT_QUERY = """
-            SELECT "public"."city"."id"                     AS "id",
-                   "public"."city"."name"                    AS "name",
-                   "public"."city"."area"                   AS "area",
-                   "public"."city"."capital"                AS "capital",
-                   "public"."city"."government"             AS "government",
-                   "public"."city"."population"             AS "population",
-                   "public"."city"."creation_date"          AS "creation_date",
-                   "public"."city"."establishment_date"     AS "establishment_date",
-                   "public"."city"."meters_above_sea_level" AS "meters_above_sea_level",
-                   "coordinates"."x"                        AS "x",
-                   "coordinates"."y"                        AS "y",
-                   "coordinates"."id"                       AS "coordinates_id"
-            FROM "public"."city"
-                     LEFT OUTER JOIN "public"."coordinate" "coordinates" ON "coordinates"."city" = "public"."city"."id"
-            """;
-
-    private final String DEFAULT_QUERY_WITH_FILTERS = DEFAULT_QUERY + "%s\n %s\n offset :offset\n limit :limit";
+    private final String DEFAULT_QUERY = "SELECT \"public\".\"city\".\"id\"                     AS \"id\",\n" +
+            "                   \"public\".\"city\".\"name\"                    AS \"name\",\n" +
+            "                   \"public\".\"city\".\"area\"                   AS \"area\",\n" +
+            "                   \"public\".\"city\".\"capital\"                AS \"capital\",\n" +
+            "                   \"public\".\"city\".\"government\"             AS \"government\",\n" +
+            "                   \"public\".\"city\".\"population\"             AS \"population\",\n" +
+            "                   \"public\".\"city\".\"creation_date\"          AS \"creation_date\",\n" +
+            "                   \"public\".\"city\".\"establishment_date\"     AS \"establishment_date\",\n" +
+            "                   \"public\".\"city\".\"meters_above_sea_level\" AS \"meters_above_sea_level\",\n" +
+            "                   \"coordinates\".\"x\"                        AS \"x\",\n" +
+            "                   \"coordinates\".\"y\"                        AS \"y\",\n" +
+            "                   \"coordinates\".\"id\"                       AS \"coordinates_id\"\n" +
+            "            FROM \"public\".\"city\"\n" +
+            "                     LEFT OUTER JOIN \"public\".\"coordinate\" \"coordinates\" ON \"coordinates\"" +
+            ".\"city\" = \"public\".\"city\".\"id\"";
 
     private final NamedParameterJdbcTemplate namedParameterJdbcOperations;
 
@@ -66,31 +61,33 @@ public class CityRepositoryService {
     }
 
     public List<CityEntity> getCitiesWithParams(CitiesRequest citiesRequest) {
-        String sql = DEFAULT_QUERY_WITH_FILTERS;
+        String sql = DEFAULT_QUERY + "%s\n %s\n offset :offset\n limit :limit";
         StringBuilder where = new StringBuilder("where 1=1\n");
-        String order = "";
+        String order;
         for (var filterStrategy : citiesRequest.getFilterStrategies()) {
             if (filterStrategy.getFilterType() == FilterType.CONTAINS) {
-                where.append("AND city.%s ".formatted(filterStrategy.getFilterColumn().getValue()))
+                where.append("AND city.")
+                        .append(filterStrategy.getFilterColumn().getValue())
                         .append(" like '%")
                         .append(filterStrategy.getFilterValue())
                         .append("%'\n");
                 continue;
             }
-            where.append("AND city.%s %s '%s'\n".formatted(
-                    filterStrategy.getFilterColumn().getValue(),
-                    SqlOperations.fromValue(filterStrategy.getFilterType().getValue()).getOperation(),
-                    filterStrategy.getFilterValue())
-            );
+            where.append("AND city.")
+                    .append(filterStrategy.getFilterColumn().getValue())
+                    .append(" ")
+                    .append(SqlOperations.fromValue(filterStrategy.getFilterType().getValue()).getOperation())
+                    .append(filterStrategy.getFilterValue())
+                    .append("\n");
         }
         SortingStrategy sortingStrategy = citiesRequest.getSortingStrategies();
         if (sortingStrategy != null) {
-            order = "order by %s %s".formatted(sortingStrategy.getSortingColumn(), sortingStrategy.getSortingType());
+            order = "order by " + sortingStrategy.getSortingColumn() + sortingStrategy.getSortingType();
         } else {
             order = "order by id desc";
         }
         return namedParameterJdbcOperations.query(
-                sql.formatted(where, order),
+                sql + where + "\n" + order + "\n" + "offset :offset\n limit :limit",
                 new MapSqlParameterSource()
                         .addValue("offset", (citiesRequest.getPage() - 1) * citiesRequest.getPageSize())
                         .addValue("limit", citiesRequest.getPageSize()),
@@ -100,12 +97,11 @@ public class CityRepositoryService {
 
     public boolean updateCityEntityById(Long cityId, CityEntity cityEntity) {
         // TODO add update coordinates
-        String sql = """
-                update public.city
-                    set name = :name, area = :area, population = :population, meters_above_sea_level = :metersAboveSeaLevel,
-                    establishment_date = :establishmentDate, capital = :capital, government = :government
-                where city.id = :cityId
-                """;
+        String sql = "update public.city\n" +
+                "set name = :name, area = :area, population = :population, meters_above_sea_level = " +
+                ":metersAboveSeaLevel,\n" +
+                "establishment_date = :establishmentDate, capital = :capital, government = :government\n" +
+                "where city.id = :cityId";
         int affectedRows = namedParameterJdbcOperations.update(
                 sql,
                 new MapSqlParameterSource("cityId", cityId)
@@ -118,26 +114,22 @@ public class CityRepositoryService {
                         .addValue("government", cityEntity.government().toString())
         );
         if (affectedRows == 0) {
-            throw new NotFoundException("City with id: %d, not found".formatted(cityId));
+            throw new NotFoundException("City with such id, not found");
         }
         return true;
     }
 
     public boolean killAllInhabitants(long cityId) {
-        String sql = """
-                delete from public.human
-                where city = :cityId
-                """;
+        String sql = "delete from public.human\n" +
+                "where city = :cityId";
         int cnt = namedParameterJdbcOperations.update(sql, new MapSqlParameterSource("cityId", cityId));
         return cnt != 0;
     }
 
     public boolean departureInhabitants(long fromCityId, long toCityId) {
-        String sql = """
-                update public.human
-                set city = :toCityId
-                where city = :fromCityId
-                """;
+        String sql = "update public.human\n" +
+                "set city = :toCityId\n" +
+                "where city = :fromCityId";
         int cnt = namedParameterJdbcOperations.update(sql, new MapSqlParameterSource("toCityId", toCityId)
                 .addValue("fromCityId", fromCityId));
         return cnt != 0;

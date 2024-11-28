@@ -6,17 +6,21 @@ services:
     build: ./genocide
     container_name: genocide_service
     networks:
-      - net 
+      - backend 
+    depends_on:
+      - postgres
     ports:
       - "4949:4848"
       - "8282:8080"
       - "8383:8181"
 
-  soa_services:
+  soa_service:
     build: ./soa
     container_name: soa_service
     networks:
-      - net
+      - backend
+    depends_on:
+      - postgres
     ports:
       - "4040:4848"
       - "7070:8080"
@@ -29,17 +33,13 @@ services:
       POSTGRES_DB: "postgres"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
     command: postgres -p 5432
-    volumes:
-      - pg_data:/var/lib/postgresql
     networks:
-      - net
+      - backend
     ports:
       - "5432:5432"
 
 networks:
-  net:
-
-volumes:
-  pg_data:
-    driver: local
+  backend:
+    driver: bridge

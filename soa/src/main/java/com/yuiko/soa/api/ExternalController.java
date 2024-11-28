@@ -2,18 +2,18 @@ package com.yuiko.soa.api;
 
 import java.util.List;
 
-import com.yuiko.soa.model.CitiesRequest;
-import com.yuiko.soa.model.City;
-import com.yuiko.soa.model.CityField;
-import com.yuiko.soa.model.FilterStrategy;
-import com.yuiko.soa.model.FilterType;
-import com.yuiko.soa.model.Government;
+import com.yuiko.soa.model.api.*;
 import com.yuiko.soa.service.CityService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ExternalController implements ExternalApiDelegate {
+public class ExternalController {
 
     private final CityService cityService;
 
@@ -21,8 +21,14 @@ public class ExternalController implements ExternalApiDelegate {
         this.cityService = cityService;
     }
 
-    @Override
-    public ResponseEntity<List<City>> getCitiesWhereGovernmentLessThen(Government type) {
+    @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/api/external/government",
+            produces = { "application/xml" }
+    )
+    public ResponseEntity<List<City>> getCitiesWhereGovernmentLessThen(
+            @NotNull @Valid @RequestParam(value = "type", required = true) Government type
+    ) {
         return ResponseEntity.ok(cityService.getCitiesWithParams(
                 new CitiesRequest()
                         .page(1)
@@ -36,12 +42,20 @@ public class ExternalController implements ExternalApiDelegate {
         ));
     }
 
-    @Override
+    @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/api/external/max/establishment-date",
+            produces = { "application/xml" }
+    )
     public ResponseEntity<City> getCityByMaxEstablishmentDate() {
         return ResponseEntity.ok(cityService.getCityByMaxEstablishmentDate());
     }
 
-    @Override
+    @RequestMapping(
+            method = RequestMethod.GET,
+            value = "/api/external/min/id",
+            produces = { "application/xml" }
+    )
     public ResponseEntity<City> getCityByMinId() {
         return ResponseEntity.ok(cityService.getCityByMinId());
     }

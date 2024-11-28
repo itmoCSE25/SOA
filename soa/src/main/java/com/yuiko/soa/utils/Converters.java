@@ -2,14 +2,10 @@ package com.yuiko.soa.utils;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import com.yuiko.soa.model.City;
-import com.yuiko.soa.model.CityRequest;
-import com.yuiko.soa.model.Coordinates;
-import com.yuiko.soa.model.Human;
+import com.yuiko.soa.model.api.*;
 import com.yuiko.soa.model.db.CityEntity;
 import com.yuiko.soa.model.db.CoordinatesEntity;
 import com.yuiko.soa.model.db.GovernmentEnum;

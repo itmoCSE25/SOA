@@ -10,10 +10,8 @@ public interface CityRepository extends CrudRepository<CityEntity, Long> {
 
     CityEntity getCityEntityById(Long id);
 
-    @Query("""
-        delete from city
-        where city.id = :id
-        returning true
-    """)
+    @Query("delete from city\n" +
+            "        where city.id = :id\n" +
+            "        returning true")
     Boolean deleteCityEntityById(Long id);
 }

@@ -1,10 +1,11 @@
 package com.yuiko.soa.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.yuiko.soa.model.CitiesRequest;
-import com.yuiko.soa.model.City;
-import com.yuiko.soa.model.CityRequest;
+import com.yuiko.soa.model.api.CitiesRequest;
+import com.yuiko.soa.model.api.City;
+import com.yuiko.soa.model.api.CityRequest;
 import com.yuiko.soa.model.db.CityEntity;
 import com.yuiko.soa.model.db.HumanEntity;
 import com.yuiko.soa.model.exceptions.NotFoundException;
@@ -31,7 +32,7 @@ public class CityService {
     public City getCityById(Long cityId) {
         CityEntity cityEntity = cityRepository.getCityEntityById(cityId);
         if (cityEntity == null) {
-            throw new NotFoundException("City with id: %d not found".formatted(cityId));
+            throw new NotFoundException("City with such id not found");
         }
         City city = Converters.cityEntityToDto(cityEntity);
         setInhabitants(city);
@@ -49,7 +50,7 @@ public class CityService {
     public List<City> getCitiesWithParams(CitiesRequest citiesRequest) {
         List<City> cities = cityRepositoryService.getCitiesWithParams(citiesRequest).stream()
                 .map(Converters::cityEntityToDto)
-                .toList();
+                .collect(Collectors.toUnmodifiableList());
         cities.forEach(this::setInhabitants);
         return cities;
     }
@@ -69,8 +70,10 @@ public class CityService {
     private void setInhabitants(City city) {
         List<HumanEntity> humanEntitiesByCityId = humanRepository.getHumanEntitiesByCity(city.getId());
         if (CollectionUtils.isNotEmpty(humanEntitiesByCityId)) {
-            city.inhabitant(humanEntitiesByCityId.stream().map(Converters::humanEntityToDto).toList());
-            List<HumanEntity> governors = humanEntitiesByCityId.stream().filter(HumanEntity::is_governor).toList();
+            city.inhabitant(humanEntitiesByCityId.stream().map(Converters::humanEntityToDto)
+                    .collect(Collectors.toUnmodifiableList()));
+            List<HumanEntity> governors = humanEntitiesByCityId.stream().filter(HumanEntity::is_governor)
+                    .collect(Collectors.toUnmodifiableList());
             if (governors.size() == 1) {
                 city.governor(Converters.humanEntityToDto(governors.get(0)));
             } else {
