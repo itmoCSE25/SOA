@@ -20,7 +20,7 @@ public class InternalApiController {
     }
 
     @GetMapping("/internal/deport/{fromCityId}/{toCityId}")
-    public void deportInhabitants(@PathVariable Long fromCityId, @PathVariable Long toCityId) {
+    public void deportInhabitants(@PathVariable("fromCityId") Long fromCityId, @PathVariable("toCityId") Long toCityId) {
         cityRepositoryService.departureInhabitants(fromCityId, toCityId);
     }
 }

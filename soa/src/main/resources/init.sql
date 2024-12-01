@@ -34,3 +34,20 @@ create table public.coordinate
     y    int,
     city int references city (id) on delete cascade
 );
+
+insert into city (name, area, population, meters_above_sea_level, establishment_date, capital, government)
+values ('Test', 2.0, 2, 100, now(), null, null);
+
+insert into city (name, area, population, meters_above_sea_level, establishment_date, capital, government)
+values ('Test2', 2.0, 2, 100, now(), null, null);
+
+insert into city (name, area, population, meters_above_sea_level, establishment_date, capital, government)
+values ('Test3', 2.0, 2, 100, now(), null, null);
+
+insert into human (height, birthday, city, is_governor)
+values (100, now(), 1, false),
+       (110, now(), 1, true);
+
+insert into human (height, birthday, city, is_governor)
+values (1, now(), 2, false),
+       (2, now(), 2, true);

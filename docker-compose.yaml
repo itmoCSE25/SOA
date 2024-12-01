@@ -1,32 +1,31 @@
 version: '3.8'
 
 services:
-
   genocide-service:
     build: ./genocide
-    container_name: genocide_service
+    container_name: genocide-service
     networks:
       - backend 
     depends_on:
-      - postgres
+      - main-db
     ports:
       - "4949:4848"
       - "8282:8080"
       - "8383:8181"
 
-  soa_service:
+  soa-service:
     build: ./soa
-    container_name: soa_service
+    container_name: soa-service
     networks:
       - backend
     depends_on:
-      - postgres
+      - main-db
     ports:
       - "4040:4848"
       - "7070:8080"
       - "7171:8181"
 
-  postgres:
+  main-db:
     image: postgres
     container_name: main-db
     environment:

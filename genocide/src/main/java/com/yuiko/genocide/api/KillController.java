@@ -20,7 +20,7 @@ public class KillController {
     WebClientService webClientService;
 
     @GET
-    @Path("/{id}")
+    @Path("{id}")
     @ApiOperation(value = "Уничтожить всё население города с заданным id", notes = "", response = Void.class, tags={ "genocide" })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = Void.class),
@@ -32,8 +32,9 @@ public class KillController {
             @ApiParam("Идентификатор города в котором необходимо уничтожить все население")
             Long id
     ) {
-        if (webClientService.killByCityId(id) != null) {
-            return Response.ok().entity(webClientService.killByCityId(id)).build();
+        Integer code = webClientService.killByCityId(id);
+        if (code == 200) {
+            return Response.ok().build();
         }
         return Response.status(Response.Status.BAD_REQUEST).build();
     }

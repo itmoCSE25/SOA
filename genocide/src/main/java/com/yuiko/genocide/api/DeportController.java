@@ -1,5 +1,7 @@
 package com.yuiko.genocide.api;
 
+import java.util.Arrays;
+
 import com.yuiko.genocide.service.WebClientService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -20,7 +22,7 @@ public class DeportController {
     WebClientService webClientService;
 
     @GET
-    @Path("/{id-from}/{id-to}")
+    @Path("{id-from}/{id-to}")
     @ApiOperation(value = "Депортировать всё население города с id-from в город с id-to", notes = "", response = Void.class, tags={ "genocide" })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = Void.class),
@@ -35,9 +37,14 @@ public class DeportController {
             @ApiParam("Идентификатор города куда надо депортировать")
             Long idTo
     ) {
-        if (webClientService.deportFromCityToAnother(idFrom, idTo) != null) {
-            return Response.ok().build();
+        Integer code;
+        System.out.println(idFrom + " " + idTo);
+        try {
+             code = webClientService.deportFromCityToAnother(idFrom, idTo);
+        } catch (Exception e) {
+            System.out.println(Arrays.toString(e.getStackTrace()));;
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        return Response.status(Response.Status.BAD_REQUEST).build();
+        return Response.ok().build();
     }
 }

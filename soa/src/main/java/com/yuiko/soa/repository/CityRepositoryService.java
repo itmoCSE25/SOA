@@ -61,7 +61,6 @@ public class CityRepositoryService {
     }
 
     public List<CityEntity> getCitiesWithParams(CitiesRequest citiesRequest) {
-        String sql = DEFAULT_QUERY + "%s\n %s\n offset :offset\n limit :limit";
         StringBuilder where = new StringBuilder("where 1=1\n");
         String order;
         for (var filterStrategy : citiesRequest.getFilterStrategies()) {
@@ -87,7 +86,7 @@ public class CityRepositoryService {
             order = "order by id desc";
         }
         return namedParameterJdbcOperations.query(
-                sql + where + "\n" + order + "\n" + "offset :offset\n limit :limit",
+                DEFAULT_QUERY + where + "\n" + order + "\n" + "offset :offset\n limit :limit",
                 new MapSqlParameterSource()
                         .addValue("offset", (citiesRequest.getPage() - 1) * citiesRequest.getPageSize())
                         .addValue("limit", citiesRequest.getPageSize()),
