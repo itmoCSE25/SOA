@@ -9,7 +9,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import axios from 'axios';
 import {useEffect, useState} from 'react';
-import Input from "../Components/Input";
+import Input from "./Input";
 import GetCityButton from "./GetCityButton";
 import { City } from '../models/City'; 
 import Button from '@mui/material/Button';
@@ -235,7 +235,7 @@ const TableCity: React.FC = () => {
 
   const fetchDeleteCity = async () => {
     try {
-      const response = await fetch(`http://localhost:9991/api/cities/${inputValue}`, {
+      const response = await fetch(`https://localhost:7171/soa-service/api/cities/${inputValue}`, {
         method: 'DELETE',      
       });
       if (response.ok) {
@@ -273,7 +273,7 @@ const TableCity: React.FC = () => {
       </CityRequest>`;
 
         try {
-          const response = await fetch(`http://localhost:9991/api/cities/${id}`, {
+          const response = await fetch(`https://localhost:7171/soa-service/api/cities/${id}`, {
             method: 'PUT',
                 headers: {
                   'Content-Type': 'application/xml',
@@ -311,7 +311,7 @@ const TableCity: React.FC = () => {
 </CityRequest>`;
   
       try {
-          const response = await fetch(`http://localhost:9991/api/external/cities`, {
+          const response = await fetch(`https://localhost:7171/soa-service/api/external/cities`, {
             method: 'POST',
                 headers: {
                   'Content-Type': 'application/xml',
@@ -345,7 +345,7 @@ const TableCity: React.FC = () => {
           </CitiesRequest>`;
 
       try {
-          const response = await axios.post('http://localhost:9991/api/cities', requestData, {
+          const response = await axios.post('https://localhost:7171/soa-service/api/cities', requestData, {
               headers: {
                   'Content-Type': 'application/xml',
               },
