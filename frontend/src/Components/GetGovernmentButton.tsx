@@ -14,7 +14,7 @@ const GetGovernmentButton: React.FC<ButtonsProps> = ({ inputValue, onCityUpdate 
 
     const handleButtonClick = async () => {
     try {
-      const response = await fetch(`http://localhost:9991/api/external/government?type=${inputValue}`);
+      const response = await fetch(`https://localhost:7171/soa-service/api/external/government?type=${inputValue}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

@@ -11,7 +11,7 @@ interface ButtonsProps {
 const GetMaxDateCityButton: React.FC<ButtonsProps> = ({onCityUpdate }) => {
   const handleButtonClick = async () => {
     try {
-      const response = await fetch(`http://localhost:9991/api/external/max/establishment-date`);
+      const response = await fetch(`https://localhost:7171/soa-service/api/external/max/establishment-date`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
