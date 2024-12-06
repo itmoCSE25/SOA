@@ -12,7 +12,7 @@ interface ButtonsProps {
 const GetCityButton: React.FC<ButtonsProps> = ({ inputValue, onCityUpdate }) => {
   const handleButtonClick = async () => {
     try {
-      const response = await fetch(`http://localhost:9991/api/cities/${inputValue}`);
+      const response = await fetch(`https://localhost:7171/soa-service/api/cities/${inputValue}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
