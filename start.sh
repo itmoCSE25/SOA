@@ -11,7 +11,7 @@ docker stop main-db
 docker rm soa-service
 docker rm genocide-service
 #docker rm main-db
-#docker rmi soa-genocide-service
-#docker rmi soa-soa-service
+docker rmi soa-genocide-service --force
+docker rmi soa-soa-service --force
 #docker network rm backend
 docker-compose up

@@ -19,10 +19,9 @@ const GetKillButton: React.FC<ButtonsProps> = ({ inputValue}) => {
   };
 
   return (
-    <Stack sx={{marginTop:2}} direction="row" spacing={2}>
-      <Button variant="outlined" onClick={handleButtonClick}>Уничтожить</Button>
-    </Stack>
+      <Stack sx={{marginTop:2}} direction="row" spacing={2}>
+        <Button variant="outlined" onClick={handleButtonClick}>Уничтожить</Button>
+      </Stack>
   );
 }
 export default GetKillButton;
-

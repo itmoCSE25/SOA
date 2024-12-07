@@ -25,8 +25,8 @@ const SelectTypeSort: React.FC<Props> = ({ value, onChange }) =>  {
               label="TypeSort"
               onChange={handleChange}
             >
-              <MenuItem value={'ASC'}>ASC</MenuItem>
-              <MenuItem value={'DESC'}>DESC</MenuItem>
+              <MenuItem value={'ASC'.toLowerCase()}>ASC</MenuItem>
+              <MenuItem value={'DESC'.toLowerCase()}>DESC</MenuItem>
             </Select>
     </FormControl>
   );

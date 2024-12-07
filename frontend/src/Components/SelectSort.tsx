@@ -25,18 +25,18 @@ const SelectSort: React.FC<Props> = ({ value, onChange }) =>  {
               label="FieldSort"
               onChange={handleChange}
             >
-              <MenuItem value={'ID'}>ID</MenuItem>
-              <MenuItem value={'NAME'}>NAME</MenuItem>
-              <MenuItem value={'X'}>X</MenuItem>
-              <MenuItem value={'Y'}>Y</MenuItem>
-              <MenuItem value={'CREATION_DATE'}>CREATION_DATE</MenuItem>
-              <MenuItem value={'AREA'}>AREA</MenuItem>
-              <MenuItem value={'POPULATION'}>POPULATION</MenuItem>
-              <MenuItem value={'METERS_ABOVE_SEA_LEVEL'}>METERS_ABOVE_SEA_LEVEL</MenuItem> 
-              <MenuItem value={'ESTABLISHMENT_DATE'}>ESTABLISHMENT_DATE</MenuItem>
-              <MenuItem value={'CAPITAL'}>CAPITAL</MenuItem>
-              <MenuItem value={'GOVERNMENT'}>ESTABLISHMENT_DATE</MenuItem>
-              <MenuItem value={'GOVERNOR'}>CAPITAL</MenuItem>
+              <MenuItem value={'id'}>ID</MenuItem>
+              <MenuItem value={'name'}>NAME</MenuItem>
+              <MenuItem value={'x'}>X</MenuItem>
+              <MenuItem value={'y'}>Y</MenuItem>
+              <MenuItem value={'creation_date'}>CREATION_DATE</MenuItem>
+              <MenuItem value={'area'}>AREA</MenuItem>
+              <MenuItem value={'population'}>POPULATION</MenuItem>
+              <MenuItem value={'METERS_ABOVE_SEA_LEVEL'.toLowerCase()}>METERS_ABOVE_SEA_LEVEL</MenuItem> 
+              <MenuItem value={'ESTABLISHMENT_DATE'.toLowerCase()}>ESTABLISHMENT_DATE</MenuItem>
+              <MenuItem value={'CAPITAL'.toLowerCase()}>CAPITAL</MenuItem>
+              <MenuItem value={'GOVERNMENT'.toLowerCase()}>ESTABLISHMENT_DATE</MenuItem>
+              <MenuItem value={'GOVERNOR'.toLowerCase()}>CAPITAL</MenuItem>
             </Select>
     </FormControl>
   );

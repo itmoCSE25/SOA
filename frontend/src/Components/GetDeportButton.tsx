@@ -22,10 +22,9 @@ const GetDeportButton: React.FC<ButtonsProps> = ({ inputFrom, inputTo}) => {
 
 
   return (
-    <Stack sx={{marginTop:2}} direction="row" spacing={2}>
-      <Button variant="outlined" onClick={handleButtonClick}>Депортировать</Button>
-    </Stack>
+      <Stack sx={{marginTop:2}} direction="row" spacing={2}>
+        <Button variant="outlined" onClick={handleButtonClick}>Депортировать</Button>
+      </Stack>
   );
 }
 export default GetDeportButton;
-
