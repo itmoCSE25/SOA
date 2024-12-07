@@ -25,7 +25,7 @@ const SelectSort: React.FC<Props> = ({ value, onChange }) =>  {
               label="FieldSort"
               onChange={handleChange}
             >
-              <MenuItem value={'ID'.toLowerCase()}>ID</MenuItem>
+              <MenuItem value={'id'}>ID</MenuItem>
               <MenuItem value={'name'}>NAME</MenuItem>
               <MenuItem value={'x'}>X</MenuItem>
               <MenuItem value={'y'}>Y</MenuItem>

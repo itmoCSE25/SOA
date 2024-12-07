@@ -38,21 +38,27 @@ public class CityRepositoryService {
             new CoordinatesEntity(rs.getLong("coordinates_id"), rs.getFloat("x"), rs.getInt("y"))
     );
 
-    private final String DEFAULT_QUERY = "SELECT \"public\".\"city\".\"id\"                     AS \"id\",\n" +
-            "                   \"public\".\"city\".\"name\"                    AS \"name\",\n" +
-            "                   \"public\".\"city\".\"area\"                   AS \"area\",\n" +
-            "                   \"public\".\"city\".\"capital\"                AS \"capital\",\n" +
-            "                   \"public\".\"city\".\"government\"             AS \"government\",\n" +
-            "                   \"public\".\"city\".\"population\"             AS \"population\",\n" +
-            "                   \"public\".\"city\".\"creation_date\"          AS \"creation_date\",\n" +
-            "                   \"public\".\"city\".\"establishment_date\"     AS \"establishment_date\",\n" +
-            "                   \"public\".\"city\".\"meters_above_sea_level\" AS \"meters_above_sea_level\",\n" +
-            "                   \"coordinates\".\"x\"                        AS \"x\",\n" +
-            "                   \"coordinates\".\"y\"                        AS \"y\",\n" +
-            "                   \"coordinates\".\"id\"                       AS \"coordinates_id\"\n" +
-            "            FROM \"public\".\"city\"\n" +
-            "                     LEFT OUTER JOIN \"public\".\"coordinate\" \"coordinates\" ON \"coordinates\"" +
-            ".\"city\" = \"public\".\"city\".\"id\"";
+    private final String DEFAULT_QUERY = """
+    SELECT public.city.id                     AS id,
+           public.city.name                   AS name,
+           public.city.area                   AS area,
+           public.city.capital                AS capital,
+           public.city.government             AS government,
+           public.city.population             AS population,
+           public.city.creation_date          AS creation_date,
+           public.city.establishment_date     AS establishment_date,
+           public.city.meters_above_sea_level AS meters_above_sea_level,
+           coordinates.x                      AS x,
+           coordinates.y                      AS y,
+           coordinates.id                     AS coordinates_id
+    FROM public.city
+    LEFT OUTER JOIN public.coordinate coordinates
+        ON coordinates.city = public.city.id
+    %s
+    %s
+    offset :offset
+    limit :limit
+    """;
 
     private final NamedParameterJdbcTemplate namedParameterJdbcOperations;
 
@@ -61,7 +67,7 @@ public class CityRepositoryService {
     }
 
     public List<CityEntity> getCitiesWithParams(CitiesRequest citiesRequest) {
-        StringBuilder where = new StringBuilder("where 1=1\n");
+        StringBuilder where = new StringBuilder(" where 1=1\n");
         String order;
         for (var filterStrategy : citiesRequest.getFilterStrategies()) {
             if (filterStrategy.getFilterType() == FilterType.CONTAINS) {
@@ -139,7 +145,7 @@ public class CityRepositoryService {
     }
 
     public CityEntity getCityByMaxEstablishmentDate() {
-        String sql = DEFAULT_QUERY + " order by establishment_date desc";
+        String sql = DEFAULT_QUERY.formatted("", "order by establishment_date desc");
         return namedParameterJdbcOperations.query(
                 sql,
                 new MapSqlParameterSource(),
@@ -148,7 +154,7 @@ public class CityRepositoryService {
     }
 
     public CityEntity getCityByMinId() {
-        String sql = DEFAULT_QUERY + " order by id";
+        String sql = DEFAULT_QUERY.formatted("", " order by id");
         return namedParameterJdbcOperations.query(
                 sql,
                 new MapSqlParameterSource(),

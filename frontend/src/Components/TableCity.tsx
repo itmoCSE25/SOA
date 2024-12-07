@@ -199,7 +199,6 @@ const TableCity: React.FC = () => {
         setCapital((prev) => !prev);
     };
 
-
     const handleCityUpdate = (newCity: City) => {
         setCities([newCity]);
         setHumans(newCity.human)
@@ -283,6 +282,7 @@ const TableCity: React.FC = () => {
       </CityRequest>`;
 
         try {
+
             const response = await fetch(`https://localhost:7171/soa-service/api/cities/${id}`, {
                 method: 'PUT',
                 headers: {
@@ -319,7 +319,6 @@ const TableCity: React.FC = () => {
     <birthday>2024-11-22T00:41:50.823Z</birthday>
   </governor>
 </CityRequest>`;
-
         try {
             const response = await fetch(`https://localhost:7171/soa-service/api/cities/${id}`, {
                 method: 'PUT',

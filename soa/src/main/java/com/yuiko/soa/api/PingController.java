@@ -14,6 +14,6 @@ public class PingController {
             produces = { "text/plain-text" }
     )
     public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("pong");
+        return ResponseEntity.ok("pong_v2");
     }
 }

@@ -1,4 +1,4 @@
-FROM payara/server-full
+FROM payara/server-full:6.2024.9-jdk17
 
 #COPY keys/soa.jks /opt/payara/appserver/glassfish/domains/domain1/config
 #COPY keys/genocide.crt genocide.crt
