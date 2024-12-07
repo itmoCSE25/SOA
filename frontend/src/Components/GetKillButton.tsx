@@ -9,7 +9,7 @@ interface ButtonsProps {
 const GetKillButton: React.FC<ButtonsProps> = ({ inputValue}) => {
   const handleButtonClick = async () => {
     try {
-      const response = await fetch(`http://localhost:9990/genocide/kill/${inputValue}`);
+      const response = await fetch(`https://localhost:8383/genocide-service/genocide/kill/${inputValue}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -19,10 +19,9 @@ const GetKillButton: React.FC<ButtonsProps> = ({ inputValue}) => {
   };
 
   return (
-    <Stack sx={{marginTop:2}} direction="row" spacing={2}>
-      <Button variant="outlined" onClick={handleButtonClick}>Уничтожить</Button>
-    </Stack>
+      <Stack sx={{marginTop:2}} direction="row" spacing={2}>
+        <Button variant="outlined" onClick={handleButtonClick}>Уничтожить</Button>
+      </Stack>
   );
 }
 export default GetKillButton;
-

@@ -76,17 +76,19 @@ public class CityRepositoryService {
                     .append(filterStrategy.getFilterColumn().getValue())
                     .append(" ")
                     .append(SqlOperations.fromValue(filterStrategy.getFilterType().getValue()).getOperation())
+                    .append("'")
                     .append(filterStrategy.getFilterValue())
+                    .append("'")
                     .append("\n");
         }
         SortingStrategy sortingStrategy = citiesRequest.getSortingStrategies();
         if (sortingStrategy != null) {
-            order = "order by " + sortingStrategy.getSortingColumn() + sortingStrategy.getSortingType();
+            order = "order by " + sortingStrategy.getSortingColumn() + " " + sortingStrategy.getSortingType();
         } else {
             order = "order by id desc";
         }
         return namedParameterJdbcOperations.query(
-                DEFAULT_QUERY + where + "\n" + order + "\n" + "offset :offset\n limit :limit",
+                DEFAULT_QUERY + " " + where + "\n" + order + "\n" + "offset :offset\n limit :limit",
                 new MapSqlParameterSource()
                         .addValue("offset", (citiesRequest.getPage() - 1) * citiesRequest.getPageSize())
                         .addValue("limit", citiesRequest.getPageSize()),
@@ -96,14 +98,16 @@ public class CityRepositoryService {
 
     public boolean updateCityEntityById(Long cityId, CityEntity cityEntity) {
         // TODO add update coordinates
-        String sql = "update public.city\n" +
-                "set name = :name, area = :area, population = :population, meters_above_sea_level = " +
+        String sql =
+        "insert into public.city (id, name, area, population, meters_above_sea_level, establishment_date, capital, government)\n" +
+                "values (:id, :name, :area, :population, :metersAboveSeaLevel, :establishmentDate, :capital, :government)" +
+                "on conflict (id) do update set" +
+                " name = :name, area = :area, population = :population, meters_above_sea_level = " +
                 ":metersAboveSeaLevel,\n" +
-                "establishment_date = :establishmentDate, capital = :capital, government = :government\n" +
-                "where city.id = :cityId";
+                "establishment_date = :establishmentDate, capital = :capital, government = :government";
         int affectedRows = namedParameterJdbcOperations.update(
                 sql,
-                new MapSqlParameterSource("cityId", cityId)
+                new MapSqlParameterSource("id", cityId)
                         .addValue("name", cityEntity.name())
                         .addValue("area", cityEntity.area())
                         .addValue("population", cityEntity.population())

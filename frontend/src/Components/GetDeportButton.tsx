@@ -11,7 +11,7 @@ interface ButtonsProps {
 const GetDeportButton: React.FC<ButtonsProps> = ({ inputFrom, inputTo}) => {
   const handleButtonClick = async () => {
     try {
-      const response = await fetch(`http://localhost:9990/genocide/deport/${inputFrom}/${inputTo}`);
+      const response = await fetch(`https://localhost:8383/genocide-service/genocide/deport/${inputFrom}/${inputTo}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -22,10 +22,9 @@ const GetDeportButton: React.FC<ButtonsProps> = ({ inputFrom, inputTo}) => {
 
 
   return (
-    <Stack sx={{marginTop:2}} direction="row" spacing={2}>
-      <Button variant="outlined" onClick={handleButtonClick}>Депортировать</Button>
-    </Stack>
+      <Stack sx={{marginTop:2}} direction="row" spacing={2}>
+        <Button variant="outlined" onClick={handleButtonClick}>Депортировать</Button>
+      </Stack>
   );
 }
 export default GetDeportButton;
-

@@ -12,6 +12,7 @@ import com.yuiko.soa.model.api.FilterType;
 import com.yuiko.soa.model.api.Pager;
 import com.yuiko.soa.service.CityService;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.core.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

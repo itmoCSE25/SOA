@@ -49,5 +49,5 @@ values (100, now(), 1, false),
        (110, now(), 1, true);
 
 insert into human (height, birthday, city, is_governor)
-values (1, now(), 2, false),
-       (2, now(), 2, true);
+values (1, now(), 35, false),
+       (2, now(), 35, true);

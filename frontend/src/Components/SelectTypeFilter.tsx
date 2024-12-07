@@ -26,12 +26,11 @@ const SelectTypeFilter: React.FC<Props> = ({ value, onChange }) =>  {
               label="TypeFilter"
               onChange={handleChange}
             >
-              <MenuItem value={'CONTAINS'}>CONTAINS</MenuItem>
-              <MenuItem value={'MORE'}>MORE</MenuItem>
-              <MenuItem value={'MORE_OR_EQUALS'}>MORE_OR_EQUALS</MenuItem>
-              <MenuItem value={'LESS'}>LESS</MenuItem>
-              <MenuItem value={'LESS_OR_EQUALS'}>LESS_OR_EQUALS</MenuItem>
-              <MenuItem value={'EQUALS'}>EQUALS</MenuItem>
+              <MenuItem value={'MORE'.toLowerCase()}>MORE</MenuItem>
+              <MenuItem value={'moreOrEquals'}>MORE_OR_EQUALS</MenuItem>
+              <MenuItem value={'LESS'.toLowerCase()}>LESS</MenuItem>
+              <MenuItem value={'lessOrEquals'.toLowerCase()}>LESS_OR_EQUALS</MenuItem>
+              <MenuItem value={'EQUALS'.toLowerCase()}>EQUALS</MenuItem>
             </Select>
     </FormControl>
   );
