@@ -28,7 +28,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import DateInputs from './DateInputs';
 import dayjs from 'dayjs';
-
+import SelectSort from './SelectSort';
+import SelectTypeSort from './SelectTypeSort';
+import SelectFieldFilter from './SelectFieldFilter';
+import SelectTypeFilter from './SelectTypeFilter';
 interface Column {
   id: keyof City;  
   label: string;
@@ -182,7 +185,14 @@ const TableCity: React.FC = () => {
   const [y, setY] = useState("");
   const [height, setHeight] = useState("");
   const [birthday, setBirthday] = useState<Date | null>(null);
-  const [selectGovernment, setSelectGovernment] = React.useState('');
+  const [selectGovernment, setSelectGovernment] = React.useState('DESPOTISM');
+  const [selectFieldSort, setSelectFieldSort] = React.useState('ID');
+  const [selectTypeSort, setSelectTypeSort] = React.useState('ASC');
+  const [selectFieldFilter, setSelectFieldFilter] = React.useState('ID');
+  const [selectTypeFilter, setSelectTypeFilter] = React.useState('CONTAINS');
+  const [inputValueFilter, setInputValueFilter] = React.useState('');
+
+  
   const [add, setAdd] = React.useState(Boolean);
 
     const handleSwitchChange = () => {
@@ -213,7 +223,7 @@ const TableCity: React.FC = () => {
   const SetData = (value: string) => {
     const index = Number(value) - 1; 
     if (index >= 0 && index < cities.length) {
-        const selectedCity = cities[index-1];
+        const selectedCity = cities[index];
         setID(inputValue);
         setName(selectedCity.name);
         setArea(selectedCity.area);
@@ -263,12 +273,12 @@ const TableCity: React.FC = () => {
         <area>${area}</area>
         <population>${population}</population>
         <metersAboveSeaLevel>${metersAboveSeaLevel}</metersAboveSeaLevel>
-        <establishmentDate>2024-11-22T01:08:28.794Z</establishmentDate>
+        <establishmentDate>2024-11-22T00:41:50.823Z</establishmentDate>
         <capital>${capital}</capital>
         <government>${selectGovernment}</government>
         <governor>
           <height>${height}</height>
-          <birthday>2024-11-22T01:08:28.794Z</birthday>
+          <birthday>2024-11-22T00:41:50.823Z</birthday>
         </governor>
       </CityRequest>`;
 
@@ -303,9 +313,9 @@ const TableCity: React.FC = () => {
   <metersAboveSeaLevel>${metersAboveSeaLevel}</metersAboveSeaLevel>
   <establishmentDate>2024-11-22T00:41:50.823Z</establishmentDate>
   <capital>${capital}</capital>
-  <government>DESPOTISM</government>
+  <government>${selectGovernment}</government>
   <governor>
-    <height>180</height>
+    <height>${height}</height>
     <birthday>2024-11-22T00:41:50.823Z</birthday>
   </governor>
 </CityRequest>`;
@@ -334,13 +344,13 @@ const TableCity: React.FC = () => {
           <page>${page + 1}</page>
           <pageSize>${rowsPerPage}</pageSize>
           <SortingStrategy>
-          <sortingType>asc</sortingType>
-          <sortingColumn>id</sortingColumn>
+          <sortingType>${selectTypeSort}</sortingType>
+          <sortingColumn>${selectFieldSort}</sortingColumn>
           </SortingStrategy>
           <FilterStrategy>
-          <filterColumn>id</filterColumn>
-          <filterType>contains</filterType>
-          <filterValue>string</filterValue>
+          <filterColumn>${selectFieldFilter}</filterColumn>
+          <filterType>${selectTypeFilter}</filterType>
+          <filterValue>${inputValueFilter}</filterValue>
           </FilterStrategy>
           </CitiesRequest>`;
 
@@ -513,10 +523,17 @@ useEffect(() => {
                                                   fetchCities();                                            
                                                   }}>Все города
               </Button>
-              <Button variant="outlined" onClick={() => {
+              {/* <Button variant="outlined" onClick={() => {
                                                   setAdd(true);
                                                   setModalActive(true);                                                                                         
-                                                  }}>Создать город</Button>    
+                                                  }}>Создать город</Button>  */}
+              <SelectSort value={selectFieldSort} onChange={setSelectFieldSort}></SelectSort> 
+              <SelectTypeSort value={selectTypeSort} onChange={setSelectTypeSort}></SelectTypeSort> 
+              <SelectFieldFilter value={selectFieldFilter} onChange={setSelectFieldFilter}></SelectFieldFilter>
+              <SelectTypeFilter value={selectTypeFilter} onChange={setSelectTypeFilter}></SelectTypeFilter>
+              <Input text='ValueFilter' value={inputValueFilter} onInputChange={setInputValueFilter} type='string'></Input>
+
+
          </Stack>                                         
         </div>
         <TableContainer sx={{ maxHeight: 700}} >
@@ -583,12 +600,12 @@ useEffect(() => {
               </tr>         
               <table>
                 <tr>     
-                  <td>
+                  {/* <td>
                     <DateInputs text='Establishment Date' value={dayjs(establishmentDate)} onInputChange={setEstablishmentDate}></DateInputs>
                   </td>
                   <td>
                     <DateInputs text='Governor birthday' value={dayjs(birthday)} onInputChange={setBirthday}></DateInputs>
-                  </td>
+                  </td> */}
                   <td>
                     <FormControlLabel sx={{marginLeft:2}} control={<Switch checked={capital} onChange={handleSwitchChange} />} label="Capital" />
                   </td>
