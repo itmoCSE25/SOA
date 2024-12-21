@@ -17,7 +17,7 @@ public class RemoteWebClientServiceImpl implements RemoteWebClientService {
     @Inject
     private RestTemplate restTemplate;
 
-    private final String defaultUrl = "http://soa-haproxy:8080/internal/";
+    private final String defaultUrl = "https://soa-haproxy:8080/internal/";
 
     @Override
     public Integer killByCityId(long id) {

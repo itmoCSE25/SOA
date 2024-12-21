@@ -12,6 +12,24 @@ spring:
         health-check-interval: 10s
         hostname: ${CONTAINER_HOST}
         port: 8080
+        scheme: https
+        health-check-tls-skip-verify: true
+  ssl:
+    bundle:
+      jks:
+        server:
+          key:
+            alias: soa
+          keystore:
+            location: "classpath:ssl/server.keystore"
+            password: changeit
+            type: PKCS12
+      pem:
+        client:
+          truststore:
+            certificate: "classpath:ssl/client.cer"
+
+
 
 datasource:
   url: jdbc:postgresql://main-db:5432/postgres
@@ -19,3 +37,9 @@ datasource:
   password: postgres
 server:
   port: 8080
+  ssl:
+    key-alias: soa-service
+    key-password: changeit
+    key-store: "classpath:ssl/server.keystore"
+    key-store-password: changeit
+    client-auth: WANT

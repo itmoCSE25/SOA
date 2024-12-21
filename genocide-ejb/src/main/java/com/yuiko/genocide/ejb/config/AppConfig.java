@@ -24,18 +24,19 @@ import org.springframework.web.client.RestTemplate;
 public class AppConfig {
 
     @Produces
+    @SuppressWarnings("deprecation")
     public RestTemplate restTemplate() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-//        TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
+        TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
 
-//        SSLContext sslContext = SSLContextBuilder
-//                .create()
-//                .loadTrustMaterial(null, acceptingTrustStrategy)
-//                .build();
-//
-//        SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
+        SSLContext sslContext = SSLContextBuilder
+                .create()
+                .loadTrustMaterial(null, acceptingTrustStrategy)
+                .build();
+
+        SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
 
         HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder.create()
-//                .setSSLSocketFactory(csf)
+                .setSSLSocketFactory(csf)
                 .build();
 
         CloseableHttpClient httpClient = HttpClients.custom()
