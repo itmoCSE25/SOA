@@ -189,8 +189,8 @@ const TableCity: React.FC = () => {
     const [selectFieldSort, setSelectFieldSort] = React.useState('id');
     const [selectTypeSort, setSelectTypeSort] = React.useState('asc');
     const [selectFieldFilter, setSelectFieldFilter] = React.useState('id');
-    const [selectTypeFilter, setSelectTypeFilter] = React.useState('contains');
-    const [inputValueFilter, setInputValueFilter] = React.useState('');
+    const [selectTypeFilter, setSelectTypeFilter] = React.useState('more');
+    const [inputValueFilter, setInputValueFilter] = React.useState('1');
 
 
     const [add, setAdd] = React.useState(Boolean);
@@ -245,7 +245,7 @@ const TableCity: React.FC = () => {
 
     const fetchDeleteCity = async () => {
         try {
-            const response = await fetch(`https://localhost:7171/soa-service/api/cities/${inputValue}`, {
+            const response = await fetch(`https://localhost:8080/api/cities/${inputValue}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
@@ -283,7 +283,7 @@ const TableCity: React.FC = () => {
       </CityRequest>`;
 
         try {
-            const response = await fetch(`https://localhost:7171/soa-service/api/cities/${id}`, {
+            const response = await fetch(`https://localhost:8080/api/cities/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/xml',
@@ -301,6 +301,7 @@ const TableCity: React.FC = () => {
     }
 
     const fetchCreateCity = async () => {
+        
         const requestData = `<?xml version="1.0" encoding="UTF-8"?>
 <CityRequest>
   <name>${name}</name>
@@ -321,7 +322,7 @@ const TableCity: React.FC = () => {
 </CityRequest>`;
 
         try {
-            const response = await fetch(`https://localhost:7171/soa-service/api/cities/${id}`, {
+            const response = await fetch(`https://localhost:8080/api/cities/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/xml',
@@ -355,7 +356,7 @@ const TableCity: React.FC = () => {
           </CitiesRequest>`;
 
         try {
-            const response = await axios.post('https://localhost:7171/soa-service/api/cities', requestData, {
+            const response = await axios.post('https://localhost:8080/api/cities', requestData, {
                 headers: {
                     'Content-Type': 'application/xml',
                 },
@@ -524,6 +525,7 @@ const TableCity: React.FC = () => {
                         }}>Все города
                         </Button>
                         { <Button variant="outlined" onClick={() => {
+                                                  setID(String(cities.length+2));
                                                   setAdd(true);
                                                   setModalActive(true);                                                                                         
                                                   }}>Создать город</Button>  }
@@ -609,9 +611,9 @@ const TableCity: React.FC = () => {
                                 <td>
                                     <FormControlLabel sx={{marginLeft:2}} control={<Switch checked={capital} onChange={handleSwitchChange} />} label="Capital" />
                                 </td>
-                                <td>
+                                {/* <td>
                                     <Input text='Id' value={id} onInputChange={(value: string) => setID(value)} type='string'></Input>
-                                </td>
+                                </td> */}
                             </tr>
                         </table>
                     </table>
