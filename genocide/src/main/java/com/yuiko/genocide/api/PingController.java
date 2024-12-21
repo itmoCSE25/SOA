@@ -1,30 +1,22 @@
 package com.yuiko.genocide.api;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Response;
+import org.jboss.logging.Logger;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Path("/ping")
-@Api("the Utility API")
+@RestController
 public class PingController {
+
+    private static Logger log = Logger.getLogger(PingController.class);
 
     public PingController() {
 
     }
 
-    @GET
-    @Produces({ "text/plain-text" })
-    @ApiOperation(value = "", notes = "", response = String.class, tags={ "utility" })
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = String.class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = Void.class)
-    })
-    public Response ping() {
-        return Response.ok("pong").build();
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping() {
+        log.info("ping");
+        return ResponseEntity.ok("genocide pong\n");
     }
 }

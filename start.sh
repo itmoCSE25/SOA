@@ -1,4 +1,4 @@
- shellcheck disable=SC2164
+shellcheck disable=SC2164
 for dir in */
 do (
   cd "$dir" || exit

@@ -2,49 +2,42 @@ package com.yuiko.genocide.api;
 
 import java.util.Arrays;
 
-import com.yuiko.genocide.service.WebClientService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Response;
+import com.yuiko.genocide.ejb.service.RemoteWebClientService;
+import org.jboss.logging.Logger;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
-@Path("/deport")
-@Produces("application/xml")
+@RestController
 public class DeportController {
 
-    @Inject
-    WebClientService webClientService;
 
-    @GET
-    @Path("{id-from}/{id-to}")
-    @ApiOperation(value = "Депортировать всё население города с id-from в город с id-to", notes = "", response = Void.class, tags={ "genocide" })
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = Void.class),
-            @ApiResponse(code = 400, message = "Can't find city with such ids", response = Void.class),
-            @ApiResponse(code = 500, message = "External Server Error", response = Void.class)
-    })
-    public Response deportFromCityToAnotherCity(
-            @PathParam("id-from")
-            @ApiParam("Идентификатор города откуда надо депортировать")
+    private final RemoteWebClientService remoteWebClientService;
+    private static Logger log = Logger.getLogger(DeportController.class);
+
+
+    public DeportController(RemoteWebClientService remoteWebClientService) {
+        this.remoteWebClientService = remoteWebClientService;
+    }
+
+    @GetMapping("/deport/{id-from}/{id-to}")
+    public ResponseEntity<Void> deportFromCityToAnotherCity(
+            @PathVariable("id-from")
             Long idFrom,
-            @PathParam("id-to")
-            @ApiParam("Идентификатор города куда надо депортировать")
+            @PathVariable("id-to")
             Long idTo
     ) {
-        Integer code;
-        System.out.println(idFrom + " " + idTo);
+        log.info("Deport from: %d, to: %d".formatted(idFrom, idTo));
+        Integer code = 123;
         try {
-             code = webClientService.deportFromCityToAnother(idFrom, idTo);
+             code = remoteWebClientService.deportFromCityToAnother(idFrom, idTo);
+             log.info("Return code: %d".formatted(code));
         } catch (Exception e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));;
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            log.error(e.getMessage());
+            log.error("Code: %d".formatted(code));
+            return ResponseEntity.badRequest().build();
         }
-        return Response.ok().build();
+        return ResponseEntity.ok().build();
     }
 }

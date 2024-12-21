@@ -2,6 +2,7 @@ package com.yuiko.soa.config;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,20 +18,23 @@ import org.springframework.transaction.TransactionManager;
 class AppConfig extends AbstractJdbcConfiguration {
 
     @Bean
-    DataSource dataSource() {
-        DataSourceBuilder dataSourceBuilder =  DataSourceBuilder.create();
+    DataSource dataSource(
+            @Value("${datasource.url}")
+            String dataSourceUrl,
+            @Value("${datasource.username}")
+            String username,
+            @Value("${datasource.password}")
+            String password
+    ) {
+        DataSourceBuilder<?> dataSourceBuilder =  DataSourceBuilder.create();
         dataSourceBuilder.driverClassName("org.postgresql.Driver");
-        dataSourceBuilder.url("jdbc:postgresql://main-db:5432/postgres");
-        dataSourceBuilder.username("postgres");
-        dataSourceBuilder.password("postgres");
+        dataSourceBuilder.url(dataSourceUrl);
+        dataSourceBuilder.username(username);
+        dataSourceBuilder.password(password);
         return dataSourceBuilder.build();
     }
 
     @Bean
-    NamedParameterJdbcOperations namedParameterJdbcOperations(DataSource dataSource) {
-        return new NamedParameterJdbcTemplate(dataSource);
-    }
-
     NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
         return new NamedParameterJdbcTemplate(dataSource);
     }

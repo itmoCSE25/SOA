@@ -1,0 +1,109 @@
+version: '3.8'
+
+services:
+  main-db:
+    image: postgres
+    container_name: main-db
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    command: postgres -p 5432
+    networks:
+      - backend
+    ports:
+      - "5432:5432"
+
+  soa-haproxy:
+    build: ./soa-haproxy
+    container_name: soa-haproxy
+    networks:
+      - backend
+    depends_on:
+      - consul
+    ports:
+      - "9091:9091"
+      - "8080:8080"
+
+  genocide-haproxy:
+    build: ./genocide-haproxy
+    container_name: genocide-haproxy
+    networks:
+      - backend
+    ports:
+      - "9092:9091"
+      - "8081:8080"
+  
+  consul:
+    container_name: consul
+    image: consul:1.15.4
+    networks:
+      - backend
+    ports:
+      - "8500:8500"
+      - "8600:8600"
+
+  soa1:
+    build: ./soa
+    container_name: soa1
+    ports:
+      - "8082:8080"
+    depends_on:
+      - main-db
+      - consul
+    environment:
+      - CONTAINER_NAME=soa-service-2
+      - CONTAINER_HOST=10.5.0.5
+    networks:
+      backend:
+        ipv4_address: 10.5.0.5
+
+  soa2:
+    build: ./soa
+    container_name: soa2
+    ports:
+      - "8083:8080"
+    depends_on:
+      - main-db
+      - consul
+    environment:
+      - CONTAINER_NAME=soa-service-1
+      - CONTAINER_HOST=10.5.0.6
+    networks:
+      backend:
+        ipv4_address: 10.5.0.6
+
+  genocide1:
+    build: ./genocide-ejb
+    container_name: genocide-service-1
+    ports:
+      - "9990:9990"
+      - "8084:8080"
+    depends_on:
+      - main-db
+      - consul
+    networks:
+      backend:
+        ipv4_address: 10.5.0.7
+  
+  genocide2:
+    build: ./genocide-ejb
+    container_name: genocide-service-2
+    ports:
+      - "9991:9990"
+      - "8085:8080"
+    depends_on:
+      - main-db
+      - consul
+    networks:
+      backend:
+        ipv4_address: 10.5.0.8
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/20
+          gateway: 10.5.0.1

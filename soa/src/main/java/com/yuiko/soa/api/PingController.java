@@ -1,6 +1,7 @@
 package com.yuiko.soa.api;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,11 @@ public class PingController {
             produces = { "text/plain-text" }
     )
     public ResponseEntity<String> ping() {
-        return ResponseEntity.ok("pong");
+        return ResponseEntity.ok("pong\n");
+    }
+
+    @GetMapping("/actuator/health")
+    public ResponseEntity<Void> health() {
+        return ResponseEntity.ok().build();
     }
 }

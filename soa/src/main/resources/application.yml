@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: soa
+  cloud:
+    consul:
+      host: consul
+      port: 8500
+      discovery:
+        instance-id: ${CONTAINER_NAME}
+        service-name: soa
+        health-check-path: /ping
+        health-check-interval: 10s
+        hostname: ${CONTAINER_HOST}
+        port: 8080
+
+datasource:
+  url: jdbc:postgresql://main-db:5432/postgres
+  username: postgres
+  password: postgres
+server:
+  port: 8080
