@@ -75,7 +75,7 @@ services:
         ipv4_address: 10.5.0.6
 
   genocide1:
-    build: ./genocide-ejb
+    build: ./genocide-soap
     container_name: genocide-service-1
     ports:
       - "9990:9990"
@@ -88,7 +88,7 @@ services:
         ipv4_address: 10.5.0.7
   
   genocide2:
-    build: ./genocide-ejb
+    build: ./genocide-soap
     container_name: genocide-service-2
     ports:
       - "9991:9990"
@@ -99,6 +99,30 @@ services:
     networks:
       backend:
         ipv4_address: 10.5.0.8
+
+  mule1:
+    build: ./mule
+    container_name: mule1
+    platform: linux
+    depends_on:
+      - genocide1
+    ports:
+      - "8091:8081"
+    networks:
+      backend:
+        ipv4_address: 10.5.0.9
+
+  mule2:
+    build: ./mule
+    container_name: mule2
+    platform: linux
+    depends_on:
+      - genocide1
+    ports:
+      - "8092:8081"
+    networks:
+      backend:
+        ipv4_address: 10.5.0.10
 
 networks:
   backend:

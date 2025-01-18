@@ -1,0 +1,10 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:gs="http://yuiko/soa">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <gs:deportRequest>
+            <gs:id-from>1</gs:id-from>
+            <gs:id-to>2</gs:id-to>
+        </gs:deportRequest>
+    </soapenv:Body>
+</soapenv:Envelope>

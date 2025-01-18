@@ -1,0 +1,8 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:gs="http://yuiko/soa">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <gs:pingRequest>
+        </gs:pingRequest>
+    </soapenv:Body>
+</soapenv:Envelope>

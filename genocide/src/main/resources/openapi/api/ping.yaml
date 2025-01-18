@@ -4,12 +4,12 @@ endpoint:
       - utility
     operationId: ping
     responses:
-      200:
+      '200':
         description: OK
         content:
           application/xml:
             schema:
               description: Идентификатор кампании
               type: string
-      500:
+      '500':
         description: Internal Server Error

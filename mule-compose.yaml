@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  mule:
+    build: ./mule
+    container_name: mule
+    platform: linux
+    depends_on:
+      - genocide-soap
+    ports:
+      - "8081:8081"
+
+  genocide-soap:
+    build: ./genocide-soap
+    container_name: genocide-soap
+    ports:
+      - "8082:8080"
+    networks:
+      backend:
+        ipv4_address: 10.5.0.5
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/20
+          gateway: 10.5.0.1

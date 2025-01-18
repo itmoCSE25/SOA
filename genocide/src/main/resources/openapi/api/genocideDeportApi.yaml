@@ -20,9 +20,9 @@ endpoint:
           type: integer
           format: int64
     responses:
-      200:
+      '200':
         description: OK
-      400:
+      '400':
         description: Can't find city with such ids
-      500:
+      '500':
         description: External Server Error

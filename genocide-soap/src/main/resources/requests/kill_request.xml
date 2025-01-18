@@ -1,0 +1,9 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:gs="http://yuiko/soa">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <gs:killRequest>
+            <gs:id>10</gs:id>
+        </gs:killRequest>
+    </soapenv:Body>
+</soapenv:Envelope>

@@ -76,7 +76,7 @@ Human:
       minimum: 0.001
     birthday:
       description: День рождение
-      type: DateTime
+      type: String
 
 Government:
   type: string
